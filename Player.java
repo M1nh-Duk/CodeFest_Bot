@@ -52,13 +52,13 @@ public class Player {
                         else { blank.remove(i);break; }
                     }}
                 // neu virus o ngay canh ben phai
-                if (map.getVirus().get(check2(virus, current_row, current_col + 1)).direction == 1 && !check(virus, current_row, current_col + 1)) {player1.move(path);dodge=true;}
+                if (map.getVirus().get(check2(virus, current_row, current_col + 2)).direction == 1 && !check(virus, current_row, current_col + 2)) {player1.move(path);dodge=true;}
                 // neu virus o ngay canh ben trai
-                if (map.getVirus().get(check2(virus, current_row, current_col - 1)).direction == 2 && !check(virus, current_row, current_col - 1)) {player1.move(path);dodge=true;}
+                if (map.getVirus().get(check2(virus, current_row, current_col - 2)).direction == 2 && !check(virus, current_row, current_col - 2)) {player1.move(path);dodge=true;}
                 // neu virus o o ngay canh ben duoi
-                if (map.getVirus().get(check2(virus, current_row + 1, current_col)).direction == 3 && !check(virus, current_row + 1, current_col)) {player1.move(path);dodge=true;}
+                if (map.getVirus().get(check2(virus, current_row + 2, current_col)).direction == 3 && !check(virus, current_row + 2, current_col)) {player1.move(path);dodge=true;}
                 // neu virus o o ngay canh ben tren
-                if (map.getVirus().get(check2(virus, current_row - 1, current_col)).direction == 4 && !check(virus, current_row - 1, current_col)) {player1.move(path);dodge=true;}
+                if (map.getVirus().get(check2(virus, current_row - 2, current_col)).direction == 4 && !check(virus, current_row - 2, current_col)) {player1.move(path);dodge=true;}
                 System.out.println("VIRUS path : "+path);
             }
         }
@@ -146,16 +146,16 @@ public class Player {
                     }
                 }
             // neu zom o ngay canh ben phai
-            if (map.getDhuman().get(check2(dhuman_pos, current_row, current_col + 1)).direction == 1 && !check(dhuman_pos, current_row, current_col + 1))
+            if (map.getDhuman().get(check2(dhuman_pos, current_row, current_col + 2)).direction == 1 && !check(dhuman_pos, current_row, current_col + 2))
                 { player1.move(path);dodge=true; }
             // neu zom o ngay canh ben trai
-            if (map.getDhuman().get(check2(dhuman_pos, current_row, current_col - 1)).direction == 2 && !check(dhuman_pos, current_row, current_col - 1))
+            if (map.getDhuman().get(check2(dhuman_pos, current_row, current_col - 2)).direction == 2 && !check(dhuman_pos, current_row, current_col - 2))
                 { player1.move(path);dodge=true; }
             // neu zom o o ngay canh ben duoi
-            if (map.getDhuman().get(check2(dhuman_pos, current_row + 1, current_col)).direction == 3 && !check(dhuman_pos, current_row + 1, current_col))
+            if (map.getDhuman().get(check2(dhuman_pos, current_row + 2, current_col)).direction == 3 && !check(dhuman_pos, current_row + 2, current_col))
                 { player1.move(path);dodge=true; }
                 // neu virus o o ngay canh ben tren
-            if (map.getDhuman().get(check2(dhuman_pos, current_row + 1, current_col)).direction == 4 && !check(dhuman_pos, current_row + 1, current_col))
+            if (map.getDhuman().get(check2(dhuman_pos, current_row + 2, current_col)).direction == 4 && !check(dhuman_pos, current_row + 2, current_col))
                 { player1.move(path);dodge=true; }
             System.out.println("ZOMBIE path: "+path);
     }
