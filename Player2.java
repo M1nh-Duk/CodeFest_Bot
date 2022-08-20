@@ -11,7 +11,7 @@ import java.util.*;
 public class Player2 {
     final static String SERVER_URL = "https://codefest.jsclub.me/";
     final static String PLAYER_ID = "player1-xxx";
-    final static String GAME_ID = "2efe929d-36b6-4c45-ad9a-d7171a4e7615";
+    final static String GAME_ID = "4f98c623-1db3-42b8-9b1a-230ce8f9ba62";
 
 
     public static String remove_last_char(String str) {
@@ -52,13 +52,13 @@ public class Player2 {
                         else { blank.remove(i);break; }
                     }}
                 // neu virus o ngay canh ben phai
-                if (map.getVirus().get(check2(virus, current_row, current_col + 1)).direction == 1 && !check(virus, current_row, current_col + 1)) {player1.move(path);dodge=true;}
+                if (map.getVirus().get(check2(virus, current_row, current_col + 2)).direction == 1 && !check(virus, current_row, current_col + 2)) {player1.move(path);dodge=true;}
                 // neu virus o ngay canh ben trai
-                if (map.getVirus().get(check2(virus, current_row, current_col - 1)).direction == 2 && !check(virus, current_row, current_col - 1)) {player1.move(path);dodge=true;}
+                if (map.getVirus().get(check2(virus, current_row, current_col - 2)).direction == 2 && !check(virus, current_row, current_col - 2)) {player1.move(path);dodge=true;}
                 // neu virus o o ngay canh ben duoi
-                if (map.getVirus().get(check2(virus, current_row + 1, current_col)).direction == 3 && !check(virus, current_row + 1, current_col)) {player1.move(path);dodge=true;}
+                if (map.getVirus().get(check2(virus, current_row + 2, current_col)).direction == 3 && !check(virus, current_row + 2, current_col)) {player1.move(path);dodge=true;}
                 // neu virus o o ngay canh ben tren
-                if (map.getVirus().get(check2(virus, current_row - 1, current_col)).direction == 4 && !check(virus, current_row - 1, current_col)) {player1.move(path);dodge=true;}
+                if (map.getVirus().get(check2(virus, current_row - 2, current_col)).direction == 4 && !check(virus, current_row - 2, current_col)) {player1.move(path);dodge=true;}
                 System.out.println("VIRUS path : "+path);
             }
         }
@@ -146,16 +146,16 @@ public class Player2 {
                     }
                 }
                 // neu zom o ngay canh ben phai
-                if (map.getDhuman().get(check2(dhuman_pos, current_row, current_col + 1)).direction == 1 && !check(dhuman_pos, current_row, current_col + 1))
+                if (map.getDhuman().get(check2(dhuman_pos, current_row, current_col + 2)).direction == 1 && !check(dhuman_pos, current_row, current_col + 2))
                 { player1.move(path);dodge=true; }
                 // neu zom o ngay canh ben trai
-                if (map.getDhuman().get(check2(dhuman_pos, current_row, current_col - 1)).direction == 2 && !check(dhuman_pos, current_row, current_col - 1))
+                if (map.getDhuman().get(check2(dhuman_pos, current_row, current_col - 2)).direction == 2 && !check(dhuman_pos, current_row, current_col - 2))
                 { player1.move(path);dodge=true; }
                 // neu zom o o ngay canh ben duoi
-                if (map.getDhuman().get(check2(dhuman_pos, current_row + 1, current_col)).direction == 3 && !check(dhuman_pos, current_row + 1, current_col))
+                if (map.getDhuman().get(check2(dhuman_pos, current_row + 2, current_col)).direction == 3 && !check(dhuman_pos, current_row + 2, current_col))
                 { player1.move(path);dodge=true; }
                 // neu virus o o ngay canh ben tren
-                if (map.getDhuman().get(check2(dhuman_pos, current_row + 1, current_col)).direction == 4 && !check(dhuman_pos, current_row + 1, current_col))
+                if (map.getDhuman().get(check2(dhuman_pos, current_row + 2, current_col)).direction == 4 && !check(dhuman_pos, current_row + 2, current_col))
                 { player1.move(path);dodge=true; }
                 System.out.println("ZOMBIE path: "+path);
             }
@@ -321,6 +321,7 @@ public class Player2 {
                     System.out.println("FULL path : " + full_path);
                     player1.move(full_path);
                     destroy_balk(map_coordinate, player1, map);
+                    dodge=run(map_coordinate,player1,map,virus,zombie,restrictPosition,blank);
                     if (full_path.compareTo("") == 0) {
                         for (int i=2; i< blank.size();i++ ) {
                             full_path=(AStarSearch.aStarSearch(map_coordinate, restrictPosition, currentPosition, blank.get(i)));
