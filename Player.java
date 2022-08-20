@@ -11,7 +11,7 @@ import java.util.*;
 public class Player {
     final static String SERVER_URL = "https://codefest.jsclub.me/";
     final static String PLAYER_ID = "player1-xxx";
-    final static String GAME_ID = "cd273953-5494-4980-83b3-0e79bf9d3df6";
+    final static String GAME_ID = "31b0c092-443b-4b10-88f6-096075faf1d7";
 
 
     public static String remove_last_char(String str) {
@@ -39,7 +39,7 @@ public class Player {
         else {
             String path = "";
             jsclub.codefest.sdk.socket.data.Player player_info = map.getPlayerByKey("player1-xxx");
-            if (player_info.pill > 1) ;
+            if (player_info.pill > 3) ;
             else {
                 ArrayList<Position> virus = new ArrayList<>();
                 for (Viruses v : map.getVirus()) {
@@ -109,31 +109,35 @@ public class Player {
         }
         System.out.println("RUN path: " + path);
         player1.move(path);
-        if (dodge_virus(map_coordinate,player1,  map, currentPosition, current_row, current_col, blank, restrictPosition)) dodge=true;
-        if (dodge_infected_human(map_coordinate,player1,  map, currentPosition, current_row, current_col, blank, restrictPosition)) dodge=true;
+        if (!dodge) {
+            if (dodge_virus(map_coordinate, player1, map, currentPosition, current_row, current_col, blank, restrictPosition)) {
+                dodge = true;
+                System.out.println("Dodge virus: " +dodge_virus(map_coordinate,player1,  map, currentPosition, current_row, current_col, blank, restrictPosition));
+            }
+        }
+        if (!dodge) {
+            if (dodge_zombie(map_coordinate,player1,  map, currentPosition, current_row, current_col, blank, restrictPosition))
+            {
+                dodge = true;
+                System.out.println("Dodge zombie: " + dodge_zombie(map_coordinate, player1, map, currentPosition, current_row, current_col, blank, restrictPosition));
+            }
+
+        }
         return dodge;
     }
-    public static Boolean dodge_infected_human (int [][] map_coordinate,Hero player1, MapInfo map, Position currentPosition, int current_row, int current_col,ArrayList<Position> blank, List<Position> restrictPosition){
+    public static Boolean dodge_zombie (int [][] map_coordinate,Hero player1, MapInfo map, Position currentPosition, int current_row, int current_col,ArrayList<Position> blank, List<Position> restrictPosition){
         Boolean dodge=false;
         if (map.getDhuman().size() == 0);
         else {
             String path ="";
             jsclub.codefest.sdk.socket.data.Player player_info = map.getPlayerByKey("player1-xxx");
-            if (player_info.pill>0);
+            if (player_info.pill>1);
             else {
             ArrayList<Position> dhuman_pos = new ArrayList<>();
             for (Human i: map.getDhuman()){
                 dhuman_pos.add(i.position);
             }
-                for (int i=0;i<blank.size();i++){
-                    for (int j =map.getBlank().size()-1;j>i;j--){
-                        Position tmp = map.getBlank().get(i);
-                        if ( AStarSearch.distanceBetweenTwoPoints(map.getCurrentPosition(player1),blank.get(j)) < AStarSearch.distanceBetweenTwoPoints(map.getCurrentPosition(player1),blank.get(i))) {
-                            blank.set(i, blank.get(j));
-                            blank.set(j, tmp);
-                        }
-                    }
-                }
+
                 for (int i=2; i< blank.size();i++ ) {
                     if (check(dhuman_pos, blank.get(i).getRow(), blank.get(i).getCol()) && !check(dhuman_pos, current_row, current_col)) {
                         path=(AStarSearch.aStarSearch(map_coordinate, restrictPosition, currentPosition, blank.get(i)));
@@ -184,6 +188,23 @@ public class Player {
         System.out.println("PILL path: " + path);
         if (path.length() > 2) return path.substring(0, 1);
         else return path;
+    }
+    public static boolean go_to_humans(int [][] map_coordinate,Hero player1, MapInfo map,List<Position> restrictPosition){
+        String path ="";
+        ArrayList<Position> human = new ArrayList<>();
+        for (Human i : map.getHuman()){
+            if (!i.infected ) human.add(i.position);
+        }
+        for (int i=0;i< human.size();i++) {
+            path = AStarSearch.aStarSearch(map_coordinate, restrictPosition, map.getCurrentPosition(player1), human.get(i));
+            if (path.compareTo("")==0) continue;
+            else {human.remove(i);break;}
+        }
+        if (path.compareTo("")==0) return true;
+        System.out.println("HUMAN path: " + path);
+        if (path.length() > 2) player1.move(path.substring(0, 1));
+        else player1.move(path);
+        return false;
     }
     public static String go_to_balks (int [][] map_coordinate,Hero player1, MapInfo map,ArrayList<Position>balk,List<Position> restrictPosition){
         String path="";
@@ -260,7 +281,8 @@ public class Player {
 
             //   BEGIN
             dodge=run(map_coordinate,player1,map,virus,zombie,restrictPosition,blank);
-            if (check_3x3(map,current_row,current_col) && !dodge) {
+            System.out.println(dodge);
+            if (check_3x3(map,current_row,current_col) && !dodge && go_to_humans(map_coordinate,player1,map,restrictPosition)) {
                 full_path = go_to_pills(map_coordinate, player1, map, pillPos, restrictPosition);
                 player1.move(full_path);
                 System.out.println("FULL path : " + full_path);
@@ -271,11 +293,9 @@ public class Player {
                     destroy_balk(map_coordinate, player1, map);
                     if (full_path.compareTo("") == 0) {
                         for (int i=2; i< blank.size();i++ ) {
-                            if (check(map.getBombList(), blank.get(i).getRow(), blank.get(i).getCol()) && !check(map.getBombList(), current_row, current_col)) {
                                 full_path=(AStarSearch.aStarSearch(map_coordinate, restrictPosition, currentPosition, blank.get(i)));
                                 if (full_path.compareTo("")==0) continue;
                                 else { blank.remove(i);break; }
-                            }
                         }
                     player1.move(full_path);
                     }
